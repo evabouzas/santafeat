@@ -165,13 +165,13 @@ dialog.player::backdrop{background:rgba(5,6,4,.88)}
 
 <section class="pad" id="work">
 <div class="work-head"><h2 class="caps">Work</h2></div>
-<ul class="cases"><li><a class="case c1" href="full/uptak.mp4" data-full="full/uptak.mp4" data-title="UPTAK — brand film" data-ext="https://uptak.com">
+<ul class="cases"><li><a class="case c1" href="full/uptak.mp4" data-full="full/uptak.mp4" data-title="UPTAK — brand film" data-ext="https://uptak.com" data-extlabel="Visit uptak.com ↗">
 <span class="case-img" aria-hidden="true"><video muted loop playsinline preload="none" poster="img/uptak.jpg"><source src="clips/uptak.mp4" type="video/mp4"></video></span>
 <span class="case-txt"><em>UPTAK</em><strong>Creative direction</strong></span>
 </a></li><li><a class="case c2" href="full/pikolin.mp4" data-full="full/pikolin.mp4" data-title="Pikolin — Unnoticed Intimacies">
 <span class="case-img" aria-hidden="true"><video muted loop playsinline preload="none" poster="img/pikolin.jpg"><source src="clips/pikolin.mp4" type="video/mp4"></video></span>
 <span class="case-txt"><em>Pikolin</em><strong>Unnoticed Intimacies</strong></span>
-</a></li><li><a class="case c3" href="full/audi.mp4" data-full="full/audi.mp4" data-title="Audi — The Doll that Chose to Drive">
+</a></li><li><a class="case c3" href="full/audi.mp4" data-full="full/audi.mp4" data-title="Audi — The Doll that Chose to Drive" data-ext="https://www.youtube.com/watch?v=Tstc6NmNAus" data-extlabel="Watch film ↗">
 <span class="case-img" aria-hidden="true"><video muted loop playsinline preload="none" poster="img/audi.jpg"><source src="clips/audi.mp4" type="video/mp4"></video></span>
 <span class="case-txt"><em>Audi</em><strong>The Doll that Chose to Drive</strong></span>
 </a></li><li><a class="case c5" href="full/gillette.mp4" data-full="full/gillette.mp4" data-title="Gillette — My Moustache">
@@ -238,18 +238,18 @@ dialog.player::backdrop{background:rgba(5,6,4,.88)}
 
 <script>
 const pl=document.getElementById('player'),plv=document.getElementById('pl-video'),plt=document.getElementById('pl-title'),ple=document.getElementById('pl-ext');
-document.querySelectorAll('[data-full]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();plt.textContent=a.dataset.title;if(a.dataset.ext){ple.href=a.dataset.ext;ple.hidden=false;}else{ple.hidden=true;}
+document.querySelectorAll('[data-full]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();plt.textContent=a.dataset.title;if(a.dataset.ext){ple.href=a.dataset.ext;ple.textContent=a.dataset.extlabel||'Visit site ↗';ple.hidden=false;}else{ple.hidden=true;}
   plv.src=a.dataset.full;pl.showModal();plv.play().catch(()=>{});}));
 function plClose(){plv.pause();plv.removeAttribute('src');plv.load();pl.close();}
 document.getElementById('pl-close').addEventListener('click',plClose);pl.addEventListener('click',e=>{if(e.target===pl)plClose();});pl.addEventListener('cancel',e=>{e.preventDefault();plClose();});
 const tiles=[...document.querySelectorAll('.case')].filter(a=>a.querySelector('video'));
 const canHover=matchMedia('(hover: hover)').matches;
 tiles.forEach(a=>{const v=a.querySelector('video');
-  if(canHover&&!a.classList.contains('pic')){a.addEventListener('mouseenter',()=>{v.muted=true;v.play().catch(()=>{});});a.addEventListener('mouseleave',()=>v.pause());a.addEventListener('focus',()=>v.play().catch(()=>{}));a.addEventListener('blur',()=>v.pause());}});
+  if(canHover){a.addEventListener('mouseenter',()=>{v.muted=true;v.play().catch(()=>{});});a.addEventListener('mouseleave',()=>v.pause());a.addEventListener('focus',()=>v.play().catch(()=>{}));a.addEventListener('blur',()=>v.pause());}});
 const pre=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const v=e.target.querySelector('video');if(v.preload==='none'){v.preload='auto';v.load();}pre.unobserve(e.target);}}),{rootMargin:'60% 0px'});
 tiles.forEach(a=>pre.observe(a));
 const auto=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target.querySelector('video');if(e.isIntersecting){v.muted=true;v.play().catch(()=>{});}else{v.pause();}}),{threshold:.5});
-tiles.forEach(a=>{if(!canHover||a.classList.contains('pic')) auto.observe(a);});
+tiles.forEach(a=>{if(!canHover) auto.observe(a);});
 document.querySelectorAll('.seq').forEach(sq=>{const a=sq.closest('.case');const fr=[...sq.querySelectorAll('.fr')];const step=+sq.dataset.step||700;const split=!!sq.dataset.split;let i=0,tm=null;
 function show(k){fr.forEach((f,j)=>f.classList.toggle('on',j===k));}
 function run(){show(i);i++;if(i<fr.length){tm=setTimeout(run,step);}else if(split){tm=setTimeout(()=>a.classList.add('go'),300);}else{tm=setTimeout(()=>{i=0;run();},step*1.5);}}
