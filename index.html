@@ -94,8 +94,9 @@ h1,h2{font-weight:400;margin:0}
 /* eva */
 .eva{display:grid;grid-template-columns:5fr 7fr;gap:28px;align-items:start;padding-block:72px 0}
 @media (max-width:820px){.eva{grid-template-columns:1fr}}
-.eva img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:70% 50%;display:block}
-@media (max-width:820px){.eva img{aspect-ratio:4/3}}
+.eva .pic .case-img{aspect-ratio:4/5}
+@media (max-width:820px){.eva .pic .case-img{aspect-ratio:4/5}}
+.eva .pic .case-txt em{font-size:15px}
 .eva-txt{background:var(--band);padding:36px 32px;display:grid;align-content:start;gap:28px}
 .eva-txt h2{font-size:clamp(22px,2.6vw,38px)}
 .eva-txt p{margin:0;font-style:italic;color:var(--ink-2);font-size:17px;line-height:1.5}
@@ -191,7 +192,7 @@ dialog.player::backdrop{background:rgba(5,6,4,.88)}
 
 
 <section class="pad eva" id="eva">
-<a class="pic" href="full/eva.mp4" data-full="full/eva.mp4" data-title="Eva Santos — Trailer"><img src="img/eva2.jpg" alt="Eva Santos"></a>
+<a class="pic case" href="full/eva.mp4" data-full="full/eva.mp4" data-title="Eva Santos — Trailer"><span class="case-img" aria-hidden="true"><video muted loop playsinline preload="none" poster="img/eva2.jpg"><source src="clips/eva.mp4" type="video/mp4"></video></span><span class="case-txt"><em>Watch with sound</em></span></a>
 <div class="eva-txt">
 <h2 class="caps">Eva Santos. Creative director for brands and businesses.</h2>
 <div class="bio"><p>Twenty years leading creative work for brands such as Audi, FC Barcelona, Gillette, P&amp;G and Jägermeister. Former Global Chief Creative Officer of Proximity Worldwide, three times among Forbes' 100 most creative people in business, and winner of more than 250 international awards.</p>
@@ -241,10 +242,14 @@ document.querySelectorAll('[data-full]').forEach(a=>a.addEventListener('click',e
   plv.src=a.dataset.full;pl.showModal();plv.play().catch(()=>{});}));
 function plClose(){plv.pause();plv.removeAttribute('src');plv.load();pl.close();}
 document.getElementById('pl-close').addEventListener('click',plClose);pl.addEventListener('click',e=>{if(e.target===pl)plClose();});pl.addEventListener('cancel',e=>{e.preventDefault();plClose();});
-document.querySelectorAll('.case').forEach(a=>{const v=a.querySelector('video'); if(!v) return;
-  a.addEventListener('mouseenter',()=>{v.muted=true;v.play().catch(()=>{});}); a.addEventListener('mouseleave',()=>{v.pause();});
-  a.addEventListener('focus',()=>v.play().catch(()=>{})); a.addEventListener('blur',()=>v.pause());});
-if(matchMedia('(hover: none)').matches){const io=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target.querySelector('video'); if(!v) return; e.isIntersecting? v.play().catch(()=>{}): v.pause();}),{threshold:.6}); document.querySelectorAll('.case').forEach(a=>{if(a.querySelector('video')) io.observe(a);});}
+const tiles=[...document.querySelectorAll('.case')].filter(a=>a.querySelector('video'));
+const canHover=matchMedia('(hover: hover)').matches;
+tiles.forEach(a=>{const v=a.querySelector('video');
+  if(canHover&&!a.classList.contains('pic')){a.addEventListener('mouseenter',()=>{v.muted=true;v.play().catch(()=>{});});a.addEventListener('mouseleave',()=>v.pause());a.addEventListener('focus',()=>v.play().catch(()=>{}));a.addEventListener('blur',()=>v.pause());}});
+const pre=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const v=e.target.querySelector('video');if(v.preload==='none'){v.preload='auto';v.load();}pre.unobserve(e.target);}}),{rootMargin:'60% 0px'});
+tiles.forEach(a=>pre.observe(a));
+const auto=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target.querySelector('video');if(e.isIntersecting){v.muted=true;v.play().catch(()=>{});}else{v.pause();}}),{threshold:.5});
+tiles.forEach(a=>{if(!canHover||a.classList.contains('pic')) auto.observe(a);});
 document.querySelectorAll('.seq').forEach(sq=>{const a=sq.closest('.case');const fr=[...sq.querySelectorAll('.fr')];const step=+sq.dataset.step||700;const split=!!sq.dataset.split;let i=0,tm=null;
 function show(k){fr.forEach((f,j)=>f.classList.toggle('on',j===k));}
 function run(){show(i);i++;if(i<fr.length){tm=setTimeout(run,step);}else if(split){tm=setTimeout(()=>a.classList.add('go'),300);}else{tm=setTimeout(()=>{i=0;run();},step*1.5);}}
