@@ -58,12 +58,12 @@ h1,h2{font-weight:400;margin:0}
 .work-head h2{font-size:clamp(28px,4vw,60px)}
 .more{margin:28px 0 0;text-align:right}
 .cases{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.cases li:nth-child(1),.cases li:nth-child(4),.cases li:nth-child(7){grid-column:1/-1}
+.cases li:nth-child(1),.cases li:nth-child(4){grid-column:1/-1}
 @media (max-width:720px){.cases{grid-template-columns:1fr;gap:18px}}
 .case{display:block;text-decoration:none;position:relative;overflow:hidden;color:var(--white)}
 .case-img{display:block;aspect-ratio:4/3;max-width:100%;background:#1d201b;transition:transform .8s ease}
-.cases li:nth-child(1) .case-img,.cases li:nth-child(4) .case-img,.cases li:nth-child(7) .case-img{aspect-ratio:16/9}
-@media (max-width:720px){.cases li:nth-child(1) .case-img,.cases li:nth-child(4) .case-img,.cases li:nth-child(7) .case-img{aspect-ratio:4/3}}
+.cases li:nth-child(1) .case-img,.cases li:nth-child(4) .case-img{aspect-ratio:16/9}
+@media (max-width:720px){.cases li:nth-child(1) .case-img,.cases li:nth-child(4) .case-img{aspect-ratio:4/3}}
 .c1 .case-img{background:radial-gradient(120% 90% at 20% 100%,#4a5243 0,#1b1e18 55%,#0b0c0a 100%)}
 .c2 .case-img{background:radial-gradient(90% 90% at 80% 20%,#8d987c 0,#3b4235 60%,#161913 100%)}
 .c3 .case-img{background:radial-gradient(100% 100% at 50% 0%,#3a3a3a 0,#111 70%)}
@@ -79,7 +79,7 @@ h1,h2{font-weight:400;margin:0}
 .case-txt{position:absolute;left:0;right:0;bottom:0;padding:22px 24px;display:grid;gap:4px;background:linear-gradient(to top,rgba(0,0,0,.45),rgba(0,0,0,0))}
 .case-txt em{font-style:italic;font-size:17px}
 .case-txt strong{font-weight:400;text-transform:uppercase;font-size:clamp(20px,2.6vw,36px);line-height:1.1;text-wrap:balance}
-.cases li:nth-child(1) .case-txt strong,.cases li:nth-child(4) .case-txt strong,.cases li:nth-child(7) .case-txt strong{font-size:clamp(24px,3.6vw,52px)}
+.cases li:nth-child(1) .case-txt strong,.cases li:nth-child(4) .case-txt strong{font-size:clamp(24px,3.6vw,52px)}
 @media (max-width:720px){.case-txt{padding:14px 14px}}
 
 /* collaboration */
@@ -138,6 +138,10 @@ dialog.player{border:0;padding:0;background:#0b0c0a;color:#e9ecdf;width:min(1200
 dialog.player::backdrop{background:rgba(5,6,4,.88)}
 .player-in{display:grid;gap:12px;padding:14px}
 .player video{width:100%;max-height:78vh;background:#000;display:block}
+.player video[hidden]{display:none}
+.pl-frame{aspect-ratio:16/9;max-height:78vh;width:100%;background:#000}
+.pl-frame[hidden]{display:none}
+.pl-frame iframe{width:100%;height:100%;border:0;display:block}
 .player-bar{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-style:italic;font-size:16px}
 .player-bar a{color:inherit}
 .player .close{all:unset;cursor:pointer;font-style:italic;border-bottom:1px solid currentColor;padding-bottom:2px}
@@ -174,6 +178,9 @@ dialog.player::backdrop{background:rgba(5,6,4,.88)}
 </a></li><li><a class="case c3" href="full/audi.mp4" data-full="full/audi.mp4" data-title="Audi — The Doll that Chose to Drive" data-ext="https://www.youtube.com/watch?v=Tstc6NmNAus" data-extlabel="Watch film ↗">
 <span class="case-img" aria-hidden="true"><video muted loop playsinline preload="none" poster="img/audi.jpg"><source src="clips/audi.mp4" type="video/mp4"></video></span>
 <span class="case-txt"><em>Audi</em><strong>The Doll that Chose to Drive</strong></span>
+</a></li><li><a class="case c8" href="https://youtu.be/LLPRJ1eNOVA" data-yt="LLPRJ1eNOVA" data-title="FC Barcelona — The Field Symbol" data-ext="https://youtu.be/LLPRJ1eNOVA" data-extlabel="Watch on YouTube ↗">
+<span class="case-img" aria-hidden="true"><img src="img/field.jpg" alt="" loading="lazy"></span>
+<span class="case-txt"><em>FC Barcelona</em><strong>The Field Symbol</strong></span>
 </a></li><li><a class="case c5" href="full/gillette.mp4" data-full="full/gillette.mp4" data-title="Gillette — My Moustache">
 <span class="case-img" aria-hidden="true"><video muted loop playsinline preload="none" poster="img/gillette.jpg"><source src="clips/gillette.mp4" type="video/mp4"></video></span>
 <span class="case-txt"><em>Gillette</em><strong>My Moustache</strong></span>
@@ -222,6 +229,7 @@ dialog.player::backdrop{background:rgba(5,6,4,.88)}
 <dialog class="player" id="player"><div class="player-in">
 <div class="player-bar"><span id="pl-title"></span><span><a id="pl-ext" href="#" hidden>Visit site ↗</a> &nbsp; <button class="close" id="pl-close">Close</button></span></div>
 <video id="pl-video" controls playsinline preload="metadata"></video>
+<div class="pl-frame" id="pl-frame" hidden></div>
 </div></dialog>
 <footer><div class="wm">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="412" height="153" viewBox="0 0 412 153">
@@ -237,10 +245,12 @@ dialog.player::backdrop{background:rgba(5,6,4,.88)}
 </div>
 
 <script>
-const pl=document.getElementById('player'),plv=document.getElementById('pl-video'),plt=document.getElementById('pl-title'),ple=document.getElementById('pl-ext');
+const pl=document.getElementById('player'),plv=document.getElementById('pl-video'),plf=document.getElementById('pl-frame'),plt=document.getElementById('pl-title'),ple=document.getElementById('pl-ext');
 document.querySelectorAll('[data-full]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();plt.textContent=a.dataset.title;if(a.dataset.ext){ple.href=a.dataset.ext;ple.textContent=a.dataset.extlabel||'Visit site ↗';ple.hidden=false;}else{ple.hidden=true;}
   plv.src=a.dataset.full;pl.showModal();plv.play().catch(()=>{});}));
-function plClose(){plv.pause();plv.removeAttribute('src');plv.load();pl.close();}
+document.querySelectorAll('[data-yt]').forEach(a=>a.addEventListener('click',e=>{if(e.metaKey||e.ctrlKey)return;e.preventDefault();plt.textContent=a.dataset.title;ple.href=a.dataset.ext;ple.textContent=a.dataset.extlabel||'Watch on YouTube ↗';ple.hidden=false;
+  plv.hidden=true;plf.hidden=false;plf.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+a.dataset.yt+'?autoplay=1&rel=0&modestbranding=1" title="'+a.dataset.title+'" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';pl.showModal();}));
+function plClose(){plv.pause();plv.removeAttribute('src');plv.load();plf.innerHTML='';plf.hidden=true;plv.hidden=false;pl.close();}
 document.getElementById('pl-close').addEventListener('click',plClose);pl.addEventListener('click',e=>{if(e.target===pl)plClose();});pl.addEventListener('cancel',e=>{e.preventDefault();plClose();});
 const tiles=[...document.querySelectorAll('.case')].filter(a=>a.querySelector('video'));
 const canHover=matchMedia('(hover: hover)').matches;
