@@ -178,7 +178,7 @@ dialog.player::backdrop{background:rgba(5,6,4,.88)}
 </a></li><li><a class="case c3" href="full/audi.mp4" data-full="full/audi.mp4" data-title="Audi — The Doll that Chose to Drive" data-ext="https://www.youtube.com/watch?v=Tstc6NmNAus" data-extlabel="Watch film ↗">
 <span class="case-img" aria-hidden="true"><video muted loop playsinline preload="none" poster="img/audi.jpg"><source src="clips/audi.mp4" type="video/mp4"></video></span>
 <span class="case-txt"><em>Audi</em><strong>The Doll that Chose to Drive</strong></span>
-</a></li><li><a class="case c8" href="https://youtu.be/LLPRJ1eNOVA" data-yt="LLPRJ1eNOVA" data-title="FC Barcelona — The Field Symbol" data-ext="https://youtu.be/LLPRJ1eNOVA" data-extlabel="Watch on YouTube ↗">
+</a></li><li><a class="case c8" href="https://youtu.be/LLPRJ1eNOVA" data-yt="LLPRJ1eNOVA" data-title="FC Barcelona — The Field Symbol">
 <span class="case-img" aria-hidden="true"><img src="img/field.jpg" alt="" loading="lazy"></span>
 <span class="case-txt"><em>FC Barcelona</em><strong>The Field Symbol</strong></span>
 </a></li><li><a class="case c5" href="full/gillette.mp4" data-full="full/gillette.mp4" data-title="Gillette — My Moustache">
@@ -248,7 +248,7 @@ dialog.player::backdrop{background:rgba(5,6,4,.88)}
 const pl=document.getElementById('player'),plv=document.getElementById('pl-video'),plf=document.getElementById('pl-frame'),plt=document.getElementById('pl-title'),ple=document.getElementById('pl-ext');
 document.querySelectorAll('[data-full]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();plt.textContent=a.dataset.title;if(a.dataset.ext){ple.href=a.dataset.ext;ple.textContent=a.dataset.extlabel||'Visit site ↗';ple.hidden=false;}else{ple.hidden=true;}
   plv.src=a.dataset.full;pl.showModal();plv.play().catch(()=>{});}));
-document.querySelectorAll('[data-yt]').forEach(a=>a.addEventListener('click',e=>{if(e.metaKey||e.ctrlKey)return;e.preventDefault();plt.textContent=a.dataset.title;ple.href=a.dataset.ext;ple.textContent=a.dataset.extlabel||'Watch on YouTube ↗';ple.hidden=false;
+document.querySelectorAll('[data-yt]').forEach(a=>a.addEventListener('click',e=>{if(e.metaKey||e.ctrlKey)return;e.preventDefault();plt.textContent=a.dataset.title;ple.hidden=true;
   plv.hidden=true;plf.hidden=false;plf.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+a.dataset.yt+'?autoplay=1&rel=0&modestbranding=1" title="'+a.dataset.title+'" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';pl.showModal();}));
 function plClose(){plv.pause();plv.removeAttribute('src');plv.load();plf.innerHTML='';plf.hidden=true;plv.hidden=false;pl.close();}
 document.getElementById('pl-close').addEventListener('click',plClose);pl.addEventListener('click',e=>{if(e.target===pl)plClose();});pl.addEventListener('cancel',e=>{e.preventDefault();plClose();});
